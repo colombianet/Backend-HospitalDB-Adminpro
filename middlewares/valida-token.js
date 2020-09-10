@@ -15,7 +15,8 @@ const validaToken = (req, res = response, next) => {
         // El uid fue enviado en el payload al generar el jwt
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Anexo el uid del usuario que hizo la solicitud, para devolverlo en el endpoint que desee
+        // Si entró aquí el token fué válido, tomo el uid del usuario q hace la soliictud por motivos de 
+        // seguridad Y si el usuario hace un delete, update..., que este quede identificado
         req.uid = uid;
         next();
     } catch (error) {

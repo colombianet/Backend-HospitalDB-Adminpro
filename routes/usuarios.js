@@ -1,8 +1,9 @@
 // Ruta /api/usuarios
 
 const { Router } = require('express');
-const { getUsuarios, crearUsuarios, actualizarUsuarios, borrarUsuario } = require('../controllers/usuarios');
 const { check } = require('express-validator');
+
+const { getUsuarios, crearUsuarios, actualizarUsuarios, borrarUsuario } = require('../controllers/usuarios');
 const { validarCampos } = require('../middlewares/valida-campos');
 const { validaToken } = require('../middlewares/valida-token');
 
