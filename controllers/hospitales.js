@@ -35,18 +35,79 @@ const crearHospital = async(req, res = response) => {
     }
 }
 
-const actualizarHospital = (req, res = response) => {
-    res.json({
-        ok: true,
-        message: 'actualizarHospital'
-    });
+const actualizarHospital = async(req, res = response) => {
+
+    // id del usuario q se va a actualizar en la BD
+    const id = req.params.id;
+    // id del usuario q está realizando la actualización
+    const uid = req.uid;
+
+    try {
+
+        const hospitalDB = await Hospital.findById(id);
+        if (!hospitalDB) {
+            return res.status(400).json({
+                ok: false,
+                message: 'No existe un Hospital con ese ID'
+            });
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        }
+
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true });
+
+        res.json({
+            ok: true,
+            message: 'Registro actualizado',
+            hospital: hospitalActualizado
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            message: 'Error, hable con el administrador'
+        });
+
+    }
+
 }
 
-const borrarHospital = (req, res = response) => {
-    res.json({
-        ok: true,
-        message: 'deleteHospital'
-    });
+const borrarHospital = async(req, res = response) => {
+
+    // id del usuario q se va a actualizar en la BD
+    const id = req.params.id;
+
+    try {
+
+        const hospitalDB = await Hospital.findById(id);
+        if (!hospitalDB) {
+            return res.status(400).json({
+                ok: false,
+                message: 'No existe un Hospital con ese ID'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+        res.json({
+            ok: true,
+            message: 'Registro eliminado'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            message: 'Error, hable con el administrador'
+        });
+
+    }
 }
 
 module.exports = {
